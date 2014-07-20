@@ -1,4 +1,4 @@
-Angular.SimpleStorage Service &amp; ngInclude Directive
+Angular.Simple Storage
 =====================
 AngularJS based localStorage service alongside an include/template enhancement directive.
 
