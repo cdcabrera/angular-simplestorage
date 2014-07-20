@@ -39,15 +39,28 @@
                 Reload data and place in localStorage.
             </label>
 
+            <br/>
+
+            <label>
+                <select name="chooseinclude" data-ng-model="questions.select">
+                    <option value="demo.include1.html">Include 1</option>
+                    <option value="demo.include2.html">Include 2</option>
+                </select>
+            </label>
+
             <h2>Results</h2>
 
             <div>
-                {{questions.result}}
+                File, {{questions.select}} - {{questions.result}}
             </div>
 
-            <div data-ng-include="'demo.include.html'"
+            <div data-ng-include="questions.select"
                  data-onload="includeLoaded()"
                  data-local-storage="questions.expire"></div>
+
+            <!--
+            <ng-include src="questions.select" onload="includeLoaded()" local-storage="questions.expire"></ng-include>
+            -->
 
 
 <!-- End Body - - - - - - - - - - - - - - - - - - - - - - - - - - -->

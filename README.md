@@ -20,10 +20,12 @@ you add the directive to ngInclude from there **localStorage** helps take over f
 ```
 
 
-I've set the local-storage attribute up with 3 potential values and a $watch (I'm debating whether I need to go back and "watch" the ngInclude as well, more testing required). Feel free to update, I'm definetly looking
-for better alternatives.
+I've set the local-storage attribute up with ~~3 potential values and a $watch (I'm debating whether I need to go back and "watch" the
+ngInclude as well, more testing required)~~
+4 potential values and a $watch on ngInclude and localStorage. Feel free to update, I'm definetly looking for better alternatives.
 
 - {String} **'' an empty value/string**: Initial data loaded and placed in localStorage
+- {String} **'cache'**: Similar to initial data load, but puts a prefrence on pulling data from the $templateCache
 - {String} **'expire'** or **'clear'**: Expires/clears the associated localStorage.
 - {String} **'reload'**: clears/expires the associated localStorage, reloads the data, and populates localStorage again.
 
