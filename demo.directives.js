@@ -49,8 +49,6 @@
 
                         case 'cache':
                         default:
-                            console.log();
-
                             localStore = simpleStorage.get(localSrc);
 
                             if( 'data' in localStore )
