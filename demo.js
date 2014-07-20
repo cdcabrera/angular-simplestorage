@@ -7,8 +7,11 @@
         $scope.questions =
         {
             expire: '',
-            result: ''
+            result: '',
+            select: 'demo.include1.html'
         };
+
+        $scope.woot = 'Checking ngInclude';
 
 
         $scope.$watch('questions.expire', function(value)
@@ -26,7 +29,7 @@
                     break;
             }
 
-            console.log({simpleApp:localStorage['demo.include.html']});
+            console.log({simpleApp:localStorage});
 
             $scope.questions.result = displayValue;
         });

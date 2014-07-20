@@ -9,41 +9,67 @@
             require: 'ngInclude',
             priority: 405,
             scope:{
+                ngInclude:'=',
+                src:'=',
                 localStorage:'='
             },
             link: function(scope, element, attr, ctrl)
             {
-                var src         = scope.$eval(attr.ngInclude || attr.src),
-                    local       = simpleStorage.get(src);
+                var src = (scope.ngInclude)? 'ngInclude' : 'src';
 
-                scope.$watch('localStorage', function(expire)
+                scope.$watch(src, SrcWatch);
+                scope.$watch('localStorage', ExpireWatch);
+
+                function SrcWatch(src)
                 {
-                    switch(expire)
+                    ExpireWatch();
+                }
+
+                function ExpireWatch(value)
+                {
+                    var localSrc = scope[src],
+                        localStore;
+
+                    if(!localSrc)
+                    {
+                        return;
+                    }
+
+                    switch(value)
                     {
                         case 'expire':
                         case 'clear':
-                            simpleStorage.clear(src);
+                            simpleStorage.clear(localSrc);
                             break;
+
                         case 'reload':
-                            simpleStorage.clear(src);
-                            $http
-                                .get(src, {cache: false})
-                                .success(function(data)
-                                {
-                                    simpleStorage.set(src, data);
-                                });
+                            simpleStorage.clear(localSrc);
+                            GetInclude(localSrc, false);
+                            break;
+
+                        case 'cache':
+                        default:
+                            console.log();
+
+                            localStore = simpleStorage.get(localSrc);
+
+                            if( 'data' in localStore )
+                            {
+                                $templateCache.put(localSrc, localStore.data);
+                            }
+                            else
+                            {
+                                //GetInclude(localSrc, $templateCache);
+                                GetInclude(localSrc, ((value === 'cache')?$templateCache : false));
+                            }
                             break;
                     }
-                });
-
-                if( 'data' in local )
-                {
-                    $templateCache.put(src, local.data);
                 }
-                else
+
+                function GetInclude(src, caching)
                 {
                     $http
-                        .get(src, {cache: $templateCache})
+                        .get(src, {cache: caching})
                         .success(function(data)
                         {
                             simpleStorage.set(src, data);
