@@ -2,7 +2,7 @@
 
     var directives = angular.module('simpleApp.directives', ['simpleApp.services']);
 
-    directives.directive('localStorage', ['$templateCache', '$http', 'simpleStorage', function($templateCache, $http, simpleStorage)
+    directives.directive('localStorage', ['$templateCache', '$http', '$timeout', 'simpleStorage', function($templateCache, $http, $timeout, simpleStorage)
     {
         return {
             restrict: 'A',
@@ -44,7 +44,16 @@
 
                         case 'reload':
                             simpleStorage.clear(localSrc);
-                            GetInclude(localSrc, false);
+
+                            GetInclude(localSrc, false).then(function()
+                            {
+                                scope[src] = '';
+                                $timeout(function()
+                                {
+                                    scope[src] = localSrc;
+                                },0);
+                            });
+
                             break;
 
                         case 'cache':
@@ -57,20 +66,24 @@
                             }
                             else
                             {
-                                //GetInclude(localSrc, $templateCache);
                                 GetInclude(localSrc, ((value === 'cache')?$templateCache : false));
                             }
                             break;
                     }
                 }
 
-                function GetInclude(src, caching)
+                function GetInclude(localSrc, caching)
                 {
-                    $http
-                        .get(src, {cache: caching})
+                    return $http
+                        .get(localSrc, {cache: caching})
                         .success(function(data)
                         {
-                            simpleStorage.set(src, data);
+                            simpleStorage.set(localSrc, data);
+                            return data;
+                        })
+                        .error(function()
+                        {
+                            return '';
                         });
                 }
             }
