@@ -35,6 +35,8 @@
                         return;
                     }
 
+                    value = value ? value.toLowerCase() : '';
+
                     switch(value)
                     {
                         case 'expire':
